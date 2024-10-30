@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
-class RouteServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
     /**
      * The path to the "home" route for your application.
@@ -27,12 +27,10 @@ class RouteServiceProvider extends ServiceProvider
             // API routes
             Route::prefix('api')
                 ->middleware('api')
-                // ->namespace($this->namespace) // Optional, bisa dihapus jika tidak diperlukan
                 ->group(base_path('routes/api.php'));
 
             // Web routes
             Route::middleware('web')
-                // ->namespace($this->namespace) // Optional, bisa dihapus jika tidak diperlukan
                 ->group(base_path('routes/web.php'));
         });
     }
@@ -44,6 +42,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-        // Konfigurasi rate limiting (bisa diabaikan untuk kasus ini)
+        // Optional: Configure rate limiting here if needed
     }
 }
