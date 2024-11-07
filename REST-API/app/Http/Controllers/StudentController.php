@@ -27,21 +27,21 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-       $input = [
-        'name' => $request->name,
-        'nim' => $request->nim,
-        'email' => $request->email,
-        'majority' => $request->majority
-       ];
+        // Validation to ensure all fields are provided
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nim' => 'required|string|max:20',
+            'email' => 'required|email|max:255|unique:students,email',
+            'majority' => 'required|string|max:255',
+        ]);
 
-       $students = Student::create($input);
+        // Create a new student record if validation passes
+        $student = Student::create($request->all());
 
-       $response = [
-        'message' => 'Successfully created new student',
-        'data' => $students
-       ];
-
-       return response()->json($response, 201);
+        return response()->json([
+            'message' => 'Student data added successfully',
+            'data' => $student
+        ], 201);
     }
 
     /**
@@ -65,50 +65,46 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        // Validasi data yang diterima
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'nim' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'majority' => 'required|string|max:255',
-        ]);
-
-        // Mencari siswa berdasarkan ID
+        // Find the student by ID
         $student = Student::find($id);
-
         if (!$student) {
             return response()->json(['message' => 'Student not found'], 404);
         }
 
-        // Memperbarui data siswa
-        $student->update($request->all());
+        // Validate only if fields are present
+        $validatedData = $request->validate([
+            'name' => 'sometimes|nullable|string|max:255',
+            'nim' => 'sometimes|nullable|string|max:20',
+            'email' => 'sometimes|nullable|email|max:255|unique:students,email,' . $id,
+            'majority' => 'sometimes|nullable|string|max:255',
+        ]);
 
-        $response = [
-            'message' => 'Successfully updated student',
+        // Update with validated data only
+        $student->update($validatedData);
+
+        return response()->json([
+            'message' => 'Student data successfully updated',
             'data' => $student
-        ];
-
-        return response()->json($response, 200);
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        // Mencari siswa berdasarkan ID
+        // Find the student by ID
         $student = Student::find($id);
 
         if (!$student) {
             return response()->json(['message' => 'Student not found'], 404);
         }
 
-        // Menghapus siswa
+        // Delete the student
         $student->delete();
 
         return response()->json(['message' => 'Student successfully deleted'], 200);
     }
-
 }
