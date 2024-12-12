@@ -1,5 +1,5 @@
-const nama = "Edo Riansyah";
-const umur = 34;
+const nama = "Hasan AL Banna";
+const umur = 19;
 
 console.log("Nama Saya: " + nama + " Umur: " + umur);
 /**
