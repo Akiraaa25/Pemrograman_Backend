@@ -1,8 +1,8 @@
 // membuat object literal
 const user = {
-  nama: "Edo Riansyah",
-  umur: 34,
-  alamat: "Depok",
+  nama: "Hasan AL Banna",
+  umur: 19,
+  alamat: "Bogor",
 };
 
 // melakukan destructing object
