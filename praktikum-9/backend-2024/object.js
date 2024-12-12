@@ -3,9 +3,9 @@
  * Membuat object menggunakan {}
  */
 const user = {
-  name: "Edo Riansyah",
-  address: "Depok",
-  age: 34,
+  name: "Hasan AL Banna",
+  address: "Bogor",
+  age: 19,
   isMarried: true,
 };
 
