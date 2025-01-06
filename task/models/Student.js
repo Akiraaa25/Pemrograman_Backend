@@ -1,34 +1,32 @@
-// import database
-const db = require("../config/database");
+const db = require('../config/db');
 
-// membuat class Model Student
 class Student {
-  /**
-   * Membuat method static all.
-   */
-  static all() {
-    // return Promise sebagai solusi Asynchronous
-    return new Promise((resolve, reject) => {
-      const sql = "SELECT * from students";
-      /**
-       * Melakukan query menggunakan method query.
-       * Menerima 2 params: query dan callback
-       */
-      db.query(sql, (err, results) => {
-        resolve(results);
-      });
-    });
+  static async all() {
+    const [rows] = await db.query('SELECT * FROM students');
+    return rows;
   }
 
-  /**
-   * TODO 1: Buat fungsi untuk insert data.
-   * Method menerima parameter data yang akan diinsert.
-   * Method mengembalikan data student yang baru diinsert.
-   */
-  static create() {
-    // code here
+  static async create(data) {
+    const { name, age, major } = data;
+    const result = await db.query('INSERT INTO students (name, age, major) VALUES (?, ?, ?)', [name, age, major]);
+    return {
+      id: result.insertId,
+      name,
+      age,
+      major
+    };
+  }
+
+  static async update(id, data) {
+    const { name, age, major } = data;
+    const result = await db.query('UPDATE students SET name = ?, age = ?, major = ? WHERE id = ?', [name, age, major, id]);
+    return result.affectedRows > 0 ? { id, name, age, major } : null;
+  }
+
+  static async delete(id) {
+    const result = await db.query('DELETE FROM students WHERE id = ?', [id]);
+    return result.affectedRows > 0;
   }
 }
 
-// export class Student
 module.exports = Student;

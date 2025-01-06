@@ -1,15 +1,18 @@
-// import express and router
 const express = require("express");
-const router = require("./routes/api");
-
-// buat object express
 const app = express();
+const dotenv = require("dotenv");
+const apiRoutes = require("./routes/api");
 
-// menggunakan middleware
+dotenv.config();  // Load environment variables from .env
+
+// Middleware untuk parsing JSON body
 app.use(express.json());
 
-// menggunakan router
-app.use(router);
+// Routing untuk API
+app.use("/api", apiRoutes);
 
-// mendefinisikan port
-app.listen(3000);
+// Menjalankan server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server berjalan pada http://localhost:${PORT}`);
+});

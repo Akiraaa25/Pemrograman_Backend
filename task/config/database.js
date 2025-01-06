@@ -1,32 +1,30 @@
-// import mysql
+// Import mysql
 const mysql = require("mysql");
 
-// import dotenv dan jalankan method config
+// Import dotenv dan jalankan method config
 require("dotenv").config();
 
-// destructing object process.env
+// Destructuring object process.env
 const { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE } = process.env;
 
-// update konfigurasi database dari file .env
+// Update konfigurasi database dari file .env
 const db = mysql.createConnection({
-  host: DB_HOST,
-  user: DB_USERNAME,
-  password: DB_PASSWORD,
-  database: DB_DATABASE,
+  host: DB_HOST || "localhost",       
+  user: DB_USERNAME || "root",      
+  password: DB_PASSWORD || "",       
+  database: DB_DATABASE || "express_student_api", 
 });
 
 /**
  * Connect ke database menggunakan method connect.
- * Menerima parameter callback
+ * Menerima parameter callback.
  */
 db.connect((err) => {
   if (err) {
-    console.log("Error connecting " + err.stack);
-    return;
-  } else {
-    console.log("Connected to database");
+    console.error(`Error connecting to database: ${err.stack}`);
     return;
   }
+  console.log("Connected to database successfully");
 });
 
 module.exports = db;

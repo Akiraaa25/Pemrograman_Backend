@@ -1,62 +1,61 @@
-// import Model Student
 const Student = require("../models/Student");
 
 class StudentController {
-  // menambahkan keyword async
+  // Menampilkan semua student
   async index(req, res) {
-    // memanggil method static all dengan async await.
-    const students = await Student.all();
-
-    const data = {
-      message: "Menampilkkan semua students",
-      data: students,
-    };
-
-    res.json(data);
+    try {
+      const students = await Student.all();
+      res.json({ message: "Menampilkan semua students", data: students });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal mengambil data students", error: error.message });
+    }
   }
 
+  // Menambahkan data student baru
   async store(req, res) {
-    /**
-     * TODO 2: memanggil method create.
-     * Method create mengembalikan data yang baru diinsert.
-     * Mengembalikan response dalam bentuk json.
-     */
-    // code here
-
-    const data = {
-      message: "Menambahkan data student",
-      data: [],
-    };
-
-    res.json(data);
+    try {
+      const { name, age, major } = req.body;
+      if (!name || !age || !major) {
+        return res.status(400).json({ message: "Field name, age, major wajib diisi" });
+      }
+      const newStudent = await Student.create({ name, age, major });
+      res.status(201).json({ message: "Berhasil menambahkan data student", data: newStudent });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal menambahkan data student", error: error.message });
+    }
   }
 
-  update(req, res) {
-    const { id } = req.params;
-    const { nama } = req.body;
-
-    const data = {
-      message: `Mengedit student id ${id}, nama ${nama}`,
-      data: [],
-    };
-
-    res.json(data);
+  // Mengupdate data student
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const { name, age, major } = req.body;
+      if (!name || !age || !major) {
+        return res.status(400).json({ message: "Field name, age, major wajib diisi" });
+      }
+      const updatedStudent = await Student.update(id, { name, age, major });
+      if (!updatedStudent) {
+        return res.status(404).json({ message: `Student dengan id ${id} tidak ditemukan` });
+      }
+      res.json({ message: `Berhasil mengupdate student dengan id ${id}`, data: updatedStudent });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal mengupdate student", error: error.message });
+    }
   }
 
-  destroy(req, res) {
-    const { id } = req.params;
-
-    const data = {
-      message: `Menghapus student id ${id}`,
-      data: [],
-    };
-
-    res.json(data);
+  // Menghapus data student
+  async destroy(req, res) {
+    try {
+      const { id } = req.params;
+      const deleted = await Student.delete(id);
+      if (!deleted) {
+        return res.status(404).json({ message: `Student dengan id ${id} tidak ditemukan` });
+      }
+      res.json({ message: `Berhasil menghapus student dengan id ${id}` });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal menghapus student", error: error.message });
+    }
   }
 }
 
-// Membuat object StudentController
-const object = new StudentController();
-
-// Export object StudentController
-module.exports = object;
+module.exports = new StudentController();
