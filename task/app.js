@@ -1,15 +1,25 @@
-// import express and router
+// app.js
+console.log(process.env);
 const express = require("express");
-const router = require("./routes/api");
-
-// buat object express
+const db = require("./config/database");  // import database connection
 const app = express();
 
-// menggunakan middleware
-app.use(express.json());
+// Set the application port
+const port = process.env.APP_PORT || 3000;
 
-// menggunakan router
-app.use(router);
+// Example route to fetch students from database
+app.get("/students", (req, res) => {
+  const query = "SELECT * FROM students";
+  db.query(query, (err, results) => {
+    if (err) {
+      res.status(500).send("Error fetching students");
+      return;
+    }
+    res.json(results);
+  });
+});
 
-// mendefinisikan port
-app.listen(3000);
+// Start the application
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

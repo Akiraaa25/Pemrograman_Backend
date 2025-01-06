@@ -1,18 +1,15 @@
-// import StudentController
-const StudentController = require("../controllers/StudentController");
-
 const express = require("express");
-const router = express.Router();
+const app = express();
+const apiRoutes = require("./routes/api");
 
-router.get("/", (req, res) => {
-  res.send("Welcome to Student API");
+// Middleware untuk parsing JSON
+app.use(express.json());
+
+// Gunakan rute API
+app.use("/api", apiRoutes);
+
+const PORT = process.env.APP_PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-// student routes
-router.get("/students", StudentController.index);
-router.post("/students", StudentController.store);
-router.put("/students/:id", StudentController.update);
-router.delete("/students/:id", StudentController.destroy);
-
-// export router
-module.exports = router;

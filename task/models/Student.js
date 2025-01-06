@@ -1,34 +1,35 @@
-// import database
+// Import koneksi database
 const db = require("../config/database");
 
-// membuat class Model Student
 class Student {
-  /**
-   * Membuat method static all.
-   */
-  static all() {
-    // return Promise sebagai solusi Asynchronous
+  static async all() {
     return new Promise((resolve, reject) => {
-      const sql = "SELECT * from students";
-      /**
-       * Melakukan query menggunakan method query.
-       * Menerima 2 params: query dan callback
-       */
-      db.query(sql, (err, results) => {
-        resolve(results);
+      const query = "SELECT * FROM students";
+      db.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
       });
     });
   }
 
-  /**
-   * TODO 1: Buat fungsi untuk insert data.
-   * Method menerima parameter data yang akan diinsert.
-   * Method mengembalikan data student yang baru diinsert.
-   */
-  static create() {
-    // code here
+  static async create(data) {
+    return new Promise((resolve, reject) => {
+      const query = "INSERT INTO students (nama) VALUES (?)";
+      db.query(query, [data.nama], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({
+            id: results.insertId,
+            ...data,
+          });
+        }
+      });
+    });
   }
 }
 
-// export class Student
 module.exports = Student;

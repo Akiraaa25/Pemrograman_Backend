@@ -1,14 +1,12 @@
-// import Model Student
+// Import Model Student
 const Student = require("../models/Student");
 
 class StudentController {
-  // menambahkan keyword async
   async index(req, res) {
-    // memanggil method static all dengan async await.
     const students = await Student.all();
 
     const data = {
-      message: "Menampilkkan semua students",
+      message: "Menampilkan semua students",
       data: students,
     };
 
@@ -16,19 +14,22 @@ class StudentController {
   }
 
   async store(req, res) {
-    /**
-     * TODO 2: memanggil method create.
-     * Method create mengembalikan data yang baru diinsert.
-     * Mengembalikan response dalam bentuk json.
-     */
-    // code here
+    try {
+      const { nama } = req.body; // Data input dari request body
+      const student = await Student.create({ nama }); // Memanggil method create
 
-    const data = {
-      message: "Menambahkan data student",
-      data: [],
-    };
+      const data = {
+        message: "Menambahkan data student",
+        data: student,
+      };
 
-    res.json(data);
+      res.status(201).json(data);
+    } catch (err) {
+      res.status(500).json({
+        message: "Gagal menambahkan data student",
+        error: err.message,
+      });
+    }
   }
 
   update(req, res) {
@@ -55,8 +56,4 @@ class StudentController {
   }
 }
 
-// Membuat object StudentController
-const object = new StudentController();
-
-// Export object StudentController
-module.exports = object;
+module.exports = new StudentController();
