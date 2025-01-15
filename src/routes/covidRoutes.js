@@ -10,10 +10,10 @@ router.get('/', CovidController.getAllPatients);
 router.post('/', CovidController.addPatient);
 
 // Update a patient by ID
-router.put('/:id', CovidController.updatePatient);  // Pastikan ini ada di controller
+router.put('/:id', CovidController.updatePatient);  
 
 // Delete a patient by ID
-router.delete('/:id', CovidController.deletePatient);  // Pastikan ini ada di controller
+router.delete('/:id', CovidController.deletePatient);  
 
 // Get a patient by ID
 router.get('/:id', CovidController.getPatientById);
@@ -22,12 +22,12 @@ router.get('/:id', CovidController.getPatientById);
 router.get('/search/:name', CovidController.searchPatientByName);
 
 // Get positive patients
-router.get('/status/positive', CovidController.getPositivePatients);  // Pastikan ada di controller
+router.get('/status/positive', CovidController.getPositivePatients);  
 
 // Get recovered patients
-router.get('/status/recovered', CovidController.getRecoveredPatients);  // Pastikan ada di controller
+router.get('/status/recovered', CovidController.getRecoveredPatients);  
 
 // Get dead patients
-router.get('/status/dead', CovidController.getDeadPatients);  // Pastikan ada di controller
+router.get('/status/dead', CovidController.getDeadPatients);  
 
 module.exports = router;
