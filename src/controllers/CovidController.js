@@ -1,6 +1,6 @@
 const Covid = require('../models/covid');
 const Sequelize = require('sequelize');
-const { Op } = Sequelize;  // Untuk menggunakan operator Sequelize seperti Op.like
+const { Op } = Sequelize; 
 
 // Get all patients
 exports.getAllPatients = async (req, res) => {
